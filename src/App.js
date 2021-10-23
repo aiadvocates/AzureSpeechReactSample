@@ -12,7 +12,8 @@ export default class App extends Component {
         super(props);
 
         this.state = {
-            displayText: 'INITIALIZED: ready to test speech...'
+            displayText: 'INITIALIZED: ready to test speech...',
+            translatedText: ''
         }
     }
     
@@ -34,6 +35,18 @@ export default class App extends Component {
         const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
         const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
 
+        const speechTranslationConfig =
+          speechsdk.SpeechTranslationConfig.fromAuthorizationToken(
+            tokenObj.authToken,
+            tokenObj.region
+          );
+          speechTranslationConfig.speechRecognitionLanguage = "en-US";
+          speechTranslationConfig.addTargetLanguage("tr");
+          const translator = new speechsdk.TranslationRecognizer(
+            speechTranslationConfig,
+            audioConfig
+          );
+
         this.setState({
             displayText: 'speak into your microphone...'
         });
@@ -50,6 +63,19 @@ export default class App extends Component {
                 displayText: displayText
             });
         });
+
+        translator.recognizeOnceAsync(result => {
+          let translation = result.translations.get('tr');
+          console.log('translation ', translation);
+          this.setState({
+            translatedText: translation
+          });
+          translator.close()
+        }, (err) => {
+          console.log("error ", err);
+          translator.close();
+
+        })
     }
 
     async fileChange(event) {
@@ -84,30 +110,43 @@ export default class App extends Component {
 
     render() {
         return (
-            <Container className="app-container">
-                <h1 className="display-4 mb-3">Speech sample app</h1>
+          <Container className="app-container">
+            <h1 className="display-4 mb-3">Speech sample app</h1>
 
-                <div className="row main-container">
-                    <div className="col-6">
-                        <i className="fas fa-microphone fa-lg mr-2" onClick={() => this.sttFromMic()}></i>
-                        Convert speech to text from your mic.
-
-                        <div className="mt-2">
-                            <label htmlFor="audio-file"><i className="fas fa-file-audio fa-lg mr-2"></i></label>
-                            <input 
-                                type="file" 
-                                id="audio-file" 
-                                onChange={(e) => this.fileChange(e)} 
-                                style={{display: "none"}} 
-                            />
-                            Convert speech to text from an audio file.
-                        </div>
-                    </div>
-                    <div className="col-6 output-display rounded">
-                        <code>{this.state.displayText}</code>
-                    </div>
+            <div className="row main-container">
+              <div className="col-6">
+                <i
+                  className="fas fa-microphone fa-lg mr-2"
+                  onClick={() => this.sttFromMic()}
+                ></i>
+                Convert speech to text from your mic.
+                <div className="mt-2">
+                  <label htmlFor="audio-file">
+                    <i className="fas fa-file-audio fa-lg mr-2"></i>
+                  </label>
+                  <input
+                    type="file"
+                    id="audio-file"
+                    onChange={(e) => this.fileChange(e)}
+                    style={{ display: "none" }}
+                  />
+                  Convert speech to text from an audio file.
                 </div>
-            </Container>
+                <div className="mt-2" onClick={() => this.sttFromMic()}>
+                  <label htmlFor="translate">
+                    <i className="fas fa-language fa-lg mr-2"></i>
+                  </label>
+                  Translate.
+                </div>
+              </div>
+              <div className="col-3 output-display rounded">
+                <code>{this.state.displayText}</code>
+              </div>
+              <div className="col-3 output-display rounded">
+                <code>{this.state.translatedText}</code>
+              </div>
+            </div>
+          </Container>
         );
     }
 }

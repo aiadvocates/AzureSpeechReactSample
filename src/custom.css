@@ -18,6 +18,14 @@
     color: #d44916;
 }
 
+.fa-language {
+    color:aqua;
+}
+
+.fa-language:hover {
+    color:rgb(1, 141, 141);
+}
+
 .output-display {
     background-color: #383b4b;
     height: 700px;

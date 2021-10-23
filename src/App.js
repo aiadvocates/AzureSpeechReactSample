@@ -28,13 +28,9 @@ export default class App extends Component {
     }
 
     async sttFromMic() {
-        const tokenObj = await getTokenOrRefresh();
-        const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
-        speechConfig.speechRecognitionLanguage = 'en-US';
-        
+        const tokenObj = await getTokenOrRefresh();  
         const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
         
-
         const speechTranslationConfig =
           speechsdk.SpeechTranslationConfig.fromAuthorizationToken(
             tokenObj.authToken,
@@ -47,36 +43,21 @@ export default class App extends Component {
             audioConfig
           );
 
-
-const recognizer = new speechsdk.SpeechRecognizer(
-  speechTranslationConfig,
-  audioConfig
-);
-
         this.setState({
           displayText: "speak into your microphone...",
         });
 
-        recognizer.recognizeOnceAsync(result => {
-            let displayText;
-            if (result.reason === ResultReason.RecognizedSpeech) {
-                displayText = `RECOGNIZED: Text=${result.text}`
-            } else {
-                displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
-            }
-
-            this.setState({
-                displayText: displayText
-            });
-        });
-
         translator.recognizeOnceAsync(result => {
-          let translation = result.translations.get('tr');
-          console.log('translation result ', result);
+          let displayText;
+          let translation = result.translations.get("tr");
+          console.log("translation result ", result);
+          displayText = `RECOGNIZED: Text=${result.text}`
+          
           this.setState({
-            translatedText: translation
+            translatedText: translation,
+            displayText: displayText
           });
-          translator.close()
+          translator.close();
         }, (err) => {
           console.log("error ", err);
           translator.close();

@@ -33,7 +33,7 @@ export default class App extends Component {
         speechConfig.speechRecognitionLanguage = 'en-US';
         
         const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
-        const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
+        
 
         const speechTranslationConfig =
           speechsdk.SpeechTranslationConfig.fromAuthorizationToken(
@@ -47,8 +47,14 @@ export default class App extends Component {
             audioConfig
           );
 
+
+const recognizer = new speechsdk.SpeechRecognizer(
+  speechTranslationConfig,
+  audioConfig
+);
+
         this.setState({
-            displayText: 'speak into your microphone...'
+          displayText: "speak into your microphone...",
         });
 
         recognizer.recognizeOnceAsync(result => {
@@ -66,7 +72,7 @@ export default class App extends Component {
 
         translator.recognizeOnceAsync(result => {
           let translation = result.translations.get('tr');
-          console.log('translation ', translation);
+          console.log('translation result ', result);
           this.setState({
             translatedText: translation
           });

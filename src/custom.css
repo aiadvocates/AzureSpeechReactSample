@@ -37,5 +37,9 @@
 
 .background {
     background-color: #272727;
-    color: #747474;
+    color: #f8f9fa;
+}
+
+code {
+   color: #f8c2db
 }

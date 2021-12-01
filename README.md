@@ -4,6 +4,9 @@ This sample shows how to integrate the Azure Speech service into a sample React 
 
 [![Ignite AI Speech Demo](https://media.giphy.com/media/CD2lECrgp0cSLsd1Ie/giphy.gif)](https://myignite.microsoft.com/sessions/0d8cd8ae-682b-4ef8-9813-677331135b5f?source=sessions&WT.mc_id=aiml-8567-ayyonet)
 
+[![Ignite AI Speech Demo](http://img.youtube.com/vi/DT9kW1cx0Fw/0.jpg)](https://youtu.be/DT9kW1cx0Fw)
+
+
 ## Prerequisites
 
 1. This article assumes that you have an Azure account and Speech service subscription. If you don't have an account and subscription, [try the Speech service for free](https://docs.microsoft.com/azure/cognitive-services/speech-service/overview#try-the-speech-service-for-free).

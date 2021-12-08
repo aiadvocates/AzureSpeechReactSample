@@ -24,8 +24,14 @@ app.get('/api/get-speech-token', async (req, res, next) => {
         };
 
         try {
-            const tokenResponse = await axios.post(`https://${speechRegion}.api.cognitive.microsoft.com/sts/v1.0/issueToken`, null, headers);
-            res.send({ token: tokenResponse.data, region: speechRegion });
+          const url =
+            "https://speech-westus-speaker.cognitiveservices.azure.com/sts/v1.0/issuetoken"; //
+          const tokenResponse = await axios.post(
+            `https://${speechRegion}.api.cognitive.microsoft.com/sts/v1.0/issueToken`,
+            null,
+            headers
+          );
+          res.send({ token: tokenResponse.data, region: speechRegion });
         } catch (err) {
             res.status(401).send('There was an error authorizing your speech key.');
         }
